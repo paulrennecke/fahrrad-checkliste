@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fahrrad-Checkliste</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 0;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto;
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: #1a1a2e;
+        background: #f0f0f0;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .page {
+        width: 210mm;
+        height: 297mm;
+        max-height: 297mm;
+        padding: 12mm 16mm 12mm 16mm;
+        background: #ffffff;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Header */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 3mm;
+        padding-top: 1mm;
+      }
+
+      .header-left {
+        text-align: left;
+      }
+
+      .header-icon {
+        width: 140px;
+        height: 140px;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+
+      .header h1 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2b5ea7;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 1mm;
+      }
+
+      .header .subtitle {
+        font-size: 11px;
+        color: #6c757d;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+      }
+
+      .divider {
+        border: none;
+        outline: none;
+        height: 1.5px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          #3a7cc6,
+          #5aad4a,
+          transparent
+        );
+        margin: 2mm 0;
+        padding: 0;
+      }
+
+      /* Section */
+      .section {
+        margin-bottom: 1.5mm;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 2mm;
+        margin-bottom: 2mm;
+      }
+
+      .section-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        flex-shrink: 0;
+      }
+
+      .section-icon.green {
+        background: #dce8f5;
+        color: #2b5ea7;
+      }
+
+      .section-icon.blue {
+        background: #dff0d8;
+        color: #3d8b37;
+      }
+
+      .section-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #2b5ea7;
+      }
+
+      .section.secondary .section-title {
+        color: #3d8b37;
+      }
+
+      /* Checklist */
+      .checklist {
+        list-style: none;
+        padding: 0;
+      }
+
+      .checklist li {
+        display: flex;
+        align-items: flex-start;
+        gap: 2.5mm;
+        padding: 1.8mm 3mm;
+        margin-bottom: 1mm;
+        border-radius: 6px;
+        background: #f8faf9;
+        border: 1px solid #e9ecef;
+        transition: none;
+        page-break-inside: avoid;
+      }
+
+      .checklist li:nth-child(even) {
+        background: #ffffff;
+      }
+
+      .checkbox {
+        width: 16px;
+        height: 16px;
+        min-width: 16px;
+        border: 2px solid #3a7cc6;
+        border-radius: 4px;
+        margin-top: 1px;
+        flex-shrink: 0;
+      }
+
+      .section.secondary .checkbox {
+        border-color: #3d8b37;
+      }
+
+      .item-text {
+        font-size: 12px;
+        line-height: 1.4;
+        color: #343a40;
+        flex: 1;
+      }
+
+      .item-icon {
+        font-size: 14px;
+        flex-shrink: 0;
+        margin-left: auto;
+        opacity: 0.7;
+      }
+
+      /* Notes section */
+      .notes-section {
+        margin-top: 2mm;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .notes-label {
+        display: flex;
+        align-items: center;
+        gap: 2mm;
+        margin-bottom: 2mm;
+      }
+
+      .notes-label .section-icon {
+        background: #f0e6d6;
+        color: #8a6d3b;
+      }
+
+      .notes-label .section-title {
+        color: #8a6d3b;
+      }
+
+      .notes-area {
+        width: 100%;
+        flex: 1;
+        border: 1.5px dashed #ced4da;
+        border-radius: 10px;
+        background: #fafbfc;
+      }
+
+      /* Footer */
+      .footer {
+        text-align: center;
+        font-size: 10px;
+        color: #adb5bd;
+        border-top: 1px solid #e9ecef;
+        padding-top: 3mm;
+        margin-top: 2mm;
+        flex-shrink: 0;
+      }
+
+      /* Print */
+      @media print {
+        body {
+          background: white;
+        }
+
+        .page {
+          margin: 0;
+          padding: 12mm 16mm 12mm 16mm;
+          box-shadow: none;
+        }
+
+        .no-print {
+          display: none !important;
+        }
+      }
+
+      /* Screen only - print button */
+      @media screen {
+        .page {
+          box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+          margin: 20px auto;
+        }
+      }
+
+      .print-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: linear-gradient(135deg, #2b5ea7, #3a7cc6);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(43, 94, 167, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 100;
+      }
+
+      .print-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(43, 94, 167, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="header">
+        <div class="header-left">
+          <h1>Fahrrad-Checkliste</h1>
+          <span class="subtitle">Be prepared - Cara Radtour 2026</span>
+        </div>
+        <img class="header-icon" src="badge.jpg" alt="Badge" />
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Verkehrstaugliches Fahrrad -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon green">🔧</div>
+          <span class="section-title">Verkehrstaugliches Fahrrad</span>
+        </div>
+        <ul class="checklist">
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text"
+              >Räder laufen rund und Mäntel haben keine Beschädigungen</span
+            >
+            <span class="item-icon">🛞</span>
+          </li>
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text">Reifendruck und Profiltiefe geprüft</span>
+            <span class="item-icon">💨</span>
+          </li>
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text"
+              >Funktionierende Vorder- und Hinterbremse</span
+            >
+            <span class="item-icon">✋</span>
+          </li>
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text">Klingel</span>
+            <span class="item-icon">🔔</span>
+          </li>
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text">Scheinwerfer vorne (weiß)</span>
+            <span class="item-icon">💡</span>
+          </li>
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text">Rücklicht mit Reflektor (rot)</span>
+            <span class="item-icon">🔴</span>
+          </li>
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text"
+              >Kette geölt, gespannt und alle Gänge schalten vernünftig</span
+            >
+            <span class="item-icon">⚙️</span>
+          </li>
+        </ul>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Weitere -->
+      <div class="section secondary">
+        <div class="section-header">
+          <div class="section-icon blue">🎒</div>
+          <span class="section-title">Weitere Ausrüstung</span>
+        </div>
+        <ul class="checklist">
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text">Möglichkeit Wasser mitzunehmen</span>
+            <span class="item-icon">💧</span>
+          </li>
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text">Regensachen</span>
+            <span class="item-icon">🌧️</span>
+          </li>
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text">Proviant-Verstaumöglichkeiten</span>
+            <span class="item-icon">🥪</span>
+          </li>
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text">Helm</span>
+            <span class="item-icon">⛑️</span>
+          </li>
+          <li>
+            <div class="checkbox"></div>
+            <span class="item-text">Fahrradschloss</span>
+            <span class="item-icon">🔒</span>
+          </li>
+        </ul>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Notizen -->
+      <div class="notes-section">
+        <div class="notes-label">
+          <div class="section-icon">✏️</div>
+          <span class="section-title">Notizen</span>
+        </div>
+        <div class="notes-area"></div>
+      </div>
+
+      <div class="footer">
+        Fahrrad-Checkliste &bull; Be prepared - Cara Radtour 2026
+      </div>
+    </div>
+
+    <button class="print-btn no-print" onclick="window.print()">
+      🖨️ Drucken
+    </button>
+  </body>
+</html>
